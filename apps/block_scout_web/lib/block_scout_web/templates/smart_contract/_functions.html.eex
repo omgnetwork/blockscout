@@ -86,7 +86,8 @@
 
           <%= if Helper.payable?(function) do %>
             <div class="form-group pr-3">
-              <input type="text" name="function_input" tx-value class="form-control form-control-sm address-input-sm mt-2" placeholder='value(<%= gettext("ETH")%>)'  />
+              <input type="text" name="function_input" tx-value
+              data-toggle="tooltip" title='Amount in native token <<%= gettext("ETH")%>>' class="form-control form-control-sm address-input-sm mt-2" placeholder='value(<%= gettext("ETH")%>)'  />
             </div>
           <% end %>
 
