@@ -1,5 +1,10 @@
-<div class="tile tile-type-<%= String.downcase(@block_type) %> fade-up" data-selector="block-tile" data-block-number="<%= to_string(@block.number) %>" data-block-hash="<%= @block.hash %>">
-  <div class="row">
+<div class="tile tile-boba tile-type-<%= String.downcase(@block_type) %> fade-up" data-selector="block-tile" data-block-number="<%= to_string(@block.number) %>" data-block-hash="<%= @block.hash %>">
+  <div class="tile-type-block">
+    <div class="tile-type">
+      Bk
+    </div>
+  </div>
+  <div class="row d-flex flex-grow-1">
     <div class="tile-transaction-type-block col-md-2 d-flex flex-row flex-md-column">
       <%= if @block_type == "Block" do %>
         <%= link(
