@@ -373,7 +373,7 @@ function bindTransactionErrorMessage (store) {
 export function placeHolderBlock (blockNumber) {
   return `
     <div
-      class="col-lg-3 d-flex fade-up-blocks-chain"
+      class="col-lg-12 d-flex fade-up-blocks-chain"
       data-block-number="${blockNumber}"
       data-selector="place-holder"
     >
