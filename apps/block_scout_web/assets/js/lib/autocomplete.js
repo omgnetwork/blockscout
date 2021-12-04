@@ -2,7 +2,7 @@ import AutoComplete from '@tarekraafat/autocomplete.js/dist/autoComplete.js'
 import { getTextAdData, fetchTextAdData } from './ad.js'
 import { DateTime } from 'luxon'
 
-const placeHolder = 'Search by address, token symbol, name, transaction hash, or block number'
+const placeHolder = 'Search by Address / Txn Hash / Block / Token'
 const dataSrc = async (query, id) => {
   try {
     // Loading placeholder text

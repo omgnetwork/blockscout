@@ -44,11 +44,17 @@ $dashboard-banner-chart-axis-font-color-alt: #333;
     max-width: 40%;
     margin: 30px auto;
   }
+
+  .dashboard-title {
+    text-align: center;
+    color: #fff;
+
+  }
 }
 
 .stats-container {
   position: relative !important;
-  height: 100px;
+  height: 150px;
 }
 
 .dashboard-banner {
@@ -57,12 +63,12 @@ $dashboard-banner-chart-axis-font-color-alt: #333;
   justify-content: space-between;
   position: absolute;
   z-index: 9;
-  background-color: #181818;
+  background-color: #fff;
   border-radius: 10px;
   z-index: 2;
   margin: auto;
   position: absolute;
-  top: -120px;
+  top: -80px;
   left: 0;
   right: 0;
   // width: 90%;
@@ -78,13 +84,21 @@ $dashboard-banner-chart-axis-font-color-alt: #333;
 
 .dashboard-banner-network-graph {
   flex-grow: 1;
-  padding: 15px 0 0 0;
-
   @include media-breakpoint-down(md) {
     display: flex;
     flex-direction: column;
     padding-top: 20px;
   }
+
+  &::before {
+    content: "";
+    border: 1px solid #dbdbdb;
+    height: 90%;
+    position: absolute;
+    margin: auto;
+    top: 10px;
+  }
+
 }
 
 .dashboard-banner-chart {
@@ -107,6 +121,14 @@ $dashboard-banner-chart-axis-font-color-alt: #333;
     max-height: 100%;
     max-width: 100%;
     width: 100%;
+  }
+
+  .dashboard-banner-chart-label {
+    text-transform: uppercase;
+    margin: 5px;
+    color: #00000080;
+    display: block;
+    white-space: nowrap;
   }
 }
 
@@ -258,9 +280,9 @@ $dashboard-banner-chart-axis-font-color-alt: #333;
 }
 
 .dashboard-banner-network-stats {
-  column-gap: 25px;
   display: grid;
-  gap: 20px;
+  row-gap: 2rem;
+  width: 100%;
   grid-template-columns: 1fr 1fr;
 
   @include media-breakpoint-down(lg) {
@@ -280,6 +302,10 @@ $dashboard-banner-chart-axis-font-color-alt: #333;
 
   @include stats-item($dashboard-stats-item-border-color, $dashboard-stats-item-label-color, $dashboard-stats-item-value-color);
 
+  .dashboard-banner-network-stats-label {
+    text-transform: uppercase;
+  }
+
   .dashboard-banner-network-stats-item {
     @media (max-width: 374px) {
       padding-left: calc(0.6rem + 4px);
@@ -288,10 +314,26 @@ $dashboard-banner-chart-axis-font-color-alt: #333;
   }
 
   .dashboard-banner-network-stats-value {
+    color: #000;
     @media (max-width: 374px) {
       font-size: 0.9rem;
     }
   }
+
+  .dashboard-banner-network-stats-group {
+    &:first-child {
+      &::after {
+        content: "";
+        border: 1px solid #dbdbdb;
+        height: 90%;
+        position: absolute;
+        margin: auto;
+        top: 10px;
+      }
+    }
+  }
+  
+
 }
 
 
