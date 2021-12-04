@@ -266,7 +266,6 @@ class MarketHistoryChart {
 export function createMarketHistoryChart (el) {
   const dataPaths = $(el).data('history_chart_paths')
   const dataConfig = $(el).data('history_chart_config')
-
   const $chartError = $('[data-chart-error-message]')
   const chart = new MarketHistoryChart(el, 0, [], dataConfig)
   Object.keys(dataPaths).forEach(function (historySource) {
@@ -274,16 +273,15 @@ export function createMarketHistoryChart (el) {
       .done(data => {
         switch (historySource) {
           case 'market': {
-            const availableSupply = JSON.parse(data.supply_data)
+            const availableSupply = 2 // JSON.parse(data.supply_data)
             const marketHistoryData = humps.camelizeKeys(JSON.parse(data.history_data))
-
+            
             $(el).show()
             chart.updateMarketHistory(availableSupply, marketHistoryData)
             break
           }
           case 'transaction': {
-            const txsHistoryData = JSON.parse(data.history_data)
-
+            const txsHistoryData = JSON.parse(data.history_data).map((d)=>({...d, closing_price: d.closing_price + 10}))
             $(el).show()
             chart.updateTransactionHistory(txsHistoryData)
             break

@@ -82,6 +82,8 @@ function baseReducer (state = initialState, action) {
       return Object.assign({}, state, { blocksError: true, blocksLoading: false })
     }
     case 'RECEIVED_NEW_EXCHANGE_RATE': {
+      console.log(state);
+      console.log(action);
       return Object.assign({}, state, {
         availableSupply: action.msg.exchangeRate.availableSupply,
         marketHistoryData: action.msg.marketHistoryData,
