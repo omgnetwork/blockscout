@@ -1,96 +1,98 @@
 <div class='dashboard-banner-container' data-page="chain-details">
-  <div class="dashboard-search">
-    <div class="dashboard-title">
-      <h1><%= gettext("The Boba Blockchain Explorer")%></h1>
-    </div>
-    <div class="dashboard-search-container"> 
-      <%= render BlockScoutWeb.LayoutView, "_search.html", conn: @conn, id: "main-search-autocomplete", additional_classes: ["mobile-search-hide"] %>
-    </div>
-  </div>
   <div class="container stats-container">
     <div class="dashboard-banner">
-      <!-- Graph and legend -->
-      <div class="dashboard-banner-network-graph">
-        <!-- Graph -->
-        <div class="dashboard-banner-chart">
-          <span class="dashboard-banner-chart-label">
-              <%= gettext "Gas on Ethereum and Boba in 14days" %>
-            </span>
-          <button data-chart-error-message class="alert alert-danger col-12 text-left mt-5" style="display: none;">
-            <span><%= gettext("There was a problem loading the chart.") %></span>
-          </button>
-          <canvas data-chart="historyChart"
-                  data-history_chart_paths=
-                  '{<%= for {{key, value}, x} <- Enum.with_index(@chart_data_paths) do %>
-                        "<%= key %>":"<%= value %>"
-                        <%= if x<(map_size(@chart_data_paths)-1) do %>
-                        ,
-                        <% end %>
-                  <% end %>}'
-                  data-history_chart_config = '<%= @chart_config_json %>'
-                  width="350" height="152">
-          </canvas>
-        </div>
-        <!-- Legend -->
-        <script>
-         numChartData = <%= Enum.reduce(@chart_config, 0, fn (source, acc) ->
-                        acc + length(elem(source, 1)) end) %>
-         document.documentElement.style.setProperty("--numChartData", numChartData);
-        </script>
-        
+      <div class="dashboard-search">
+        <div class="dashboard-title">
+          <h1><%= gettext("The Boba Blockchain Explorer")%></h1>
+        </div>  
       </div>
-      <!-- Stats -->
-      <div class="dashboard-banner-network-plain-container">
-        <div class="dashboard-banner-network-stats">
-          <%= case @average_block_time do %>
-            <% {:error, :disabled} -> %>
-              <%= nil %>
-            <% average_block_time -> %>
-              <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-1">
-                <span class="dashboard-banner-network-stats-label">
-                  <%= gettext "Average block time" %>
-                </span>
-                <span class="dashboard-banner-network-stats-value" data-selector="average-block-time">
-                  <%= Timex.format_duration(average_block_time, Explorer.Counters.AverageBlockTimeDurationFormat) %>
-                </span>
-              </div>
-          <% end %>
-          <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-2">
-            <span class="dashboard-banner-network-stats-label">
-              <%= gettext "Total transactions" %>
-            </span>
-            <div style="display: flex;">
-              <span class="dashboard-banner-network-stats-value" data-selector="transaction-count">
-                <%= BlockScoutWeb.Cldr.Number.to_string!(@transaction_estimated_count, format: "#,###") %>
+      <div class="dashboard-search-container"> 
+        <%= render BlockScoutWeb.LayoutView, "_search.html", conn: @conn, id: "main-search-autocomplete", additional_classes: ["mobile-search-hide"] %>
+      </div>
+      <div class="dashboard-banner-content">
+        <!-- Graph and legend -->
+        <div class="dashboard-banner-network-graph">
+          <!-- Graph -->
+          <div class="dashboard-banner-chart">
+            <span class="dashboard-banner-chart-label">
+                <%= gettext "Gas on Ethereum and Boba in 14days" %>
               </span>
-              <%= if @total_gas_usage > 0 do %>
-                <span
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  data-html="true"
-                  data-template="<div class='tooltip tooltip-inversed-color tooltip-gas-usage' role='tooltip'><div class='arrow'></div><div class='tooltip-inner'></div></div>"
-                  title="<div class='custom-tooltip-header'>Total gas used</div><div class='custom-tooltip-description'><b><%= BlockScoutWeb.Cldr.Number.to_string!(@total_gas_usage, format: "#,###") %><b></div>"
-                  class="custom-tooltip-total-transactions">
-                  <i style="color: #ffffff;" class="fa fa-info-circle ml-2"></i>
+            <button data-chart-error-message class="alert alert-danger col-12 text-left mt-5" style="display: none;">
+              <span><%= gettext("There was a problem loading the chart.") %></span>
+            </button>
+            <canvas data-chart="historyChart"
+                    data-history_chart_paths=
+                    '{<%= for {{key, value}, x} <- Enum.with_index(@chart_data_paths) do %>
+                          "<%= key %>":"<%= value %>"
+                          <%= if x<(map_size(@chart_data_paths)-1) do %>
+                          ,
+                          <% end %>
+                    <% end %>}'
+                    data-history_chart_config = '<%= @chart_config_json %>'
+                    width="350" height="152">
+            </canvas>
+          </div>
+          <!-- Legend -->
+          <script>
+          numChartData = <%= Enum.reduce(@chart_config, 0, fn (source, acc) ->
+                          acc + length(elem(source, 1)) end) %>
+          document.documentElement.style.setProperty("--numChartData", numChartData);
+          </script>
+          
+        </div>
+        <!-- Stats -->
+        <div class="dashboard-banner-network-plain-container">
+          <div class="dashboard-banner-network-stats">
+            <%= case @average_block_time do %>
+              <% {:error, :disabled} -> %>
+                <%= nil %>
+              <% average_block_time -> %>
+                <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-1">
+                  <span class="dashboard-banner-network-stats-label">
+                    <%= gettext "Average block time" %>
+                  </span>
+                  <span class="dashboard-banner-network-stats-value" data-selector="average-block-time">
+                    <%= Timex.format_duration(average_block_time, Explorer.Counters.AverageBlockTimeDurationFormat) %>
+                  </span>
+                </div>
+            <% end %>
+            <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-2">
+              <span class="dashboard-banner-network-stats-label">
+                <%= gettext "Total transactions" %>
+              </span>
+              <div style="display: flex;">
+                <span class="dashboard-banner-network-stats-value" data-selector="transaction-count">
+                  <%= BlockScoutWeb.Cldr.Number.to_string!(@transaction_estimated_count, format: "#,###") %>
                 </span>
-              <% end %>
+                <%= if @total_gas_usage > 0 do %>
+                  <span
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    data-html="true"
+                    data-template="<div class='tooltip tooltip-inversed-color tooltip-gas-usage' role='tooltip'><div class='arrow'></div><div class='tooltip-inner'></div></div>"
+                    title="<div class='custom-tooltip-header'>Total gas used</div><div class='custom-tooltip-description'><b><%= BlockScoutWeb.Cldr.Number.to_string!(@total_gas_usage, format: "#,###") %><b></div>"
+                    class="custom-tooltip-total-transactions">
+                    <i style="color: #ffffff;" class="fa fa-info-circle ml-2"></i>
+                  </span>
+                <% end %>
+              </div>
             </div>
-          </div>
-          <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-3">
-            <span class="dashboard-banner-network-stats-label">
-              <%= gettext "Total blocks" %>
-            </span>
-            <span class="dashboard-banner-network-stats-value" data-selector="block-count">
-              <%= BlockScoutWeb.Cldr.Number.to_string!(@block_count, format: "#,###") %>
-            </span>
-          </div>
-          <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-4">
-            <span class="dashboard-banner-network-stats-label">
-              <%= gettext "Wallet addresses" %>
-            </span>
-            <span class="dashboard-banner-network-stats-value" data-selector="address-count">
-              <%= BlockScoutWeb.Cldr.Number.to_string!(@address_count, format: "#,###") %>
-            </span>
+            <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-3">
+              <span class="dashboard-banner-network-stats-label">
+                <%= gettext "Total blocks" %>
+              </span>
+              <span class="dashboard-banner-network-stats-value" data-selector="block-count">
+                <%= BlockScoutWeb.Cldr.Number.to_string!(@block_count, format: "#,###") %>
+              </span>
+            </div>
+            <div class="dashboard-banner-network-stats-item dashboard-banner-network-stats-item-4">
+              <span class="dashboard-banner-network-stats-label">
+                <%= gettext "Wallet addresses" %>
+              </span>
+              <span class="dashboard-banner-network-stats-value" data-selector="address-count">
+                <%= BlockScoutWeb.Cldr.Number.to_string!(@address_count, format: "#,###") %>
+              </span>
+            </div>
           </div>
         </div>
       </div>
