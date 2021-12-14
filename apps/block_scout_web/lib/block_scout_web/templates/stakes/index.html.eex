@@ -33,7 +33,7 @@
       render BlockScoutWeb.StakesView,
       "_table.html",
       pools_type: @pools_type
-    %>
+    %>w
 
     <div class="card-footer-paging">
       <%=
