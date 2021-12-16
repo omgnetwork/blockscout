@@ -7,7 +7,7 @@
   ```
     /// update bash profile to start pg via short form
     #POSTGRESQL - START
-    export PGDATA='/Users/sahil/data/postgres'
+    export PGDATA='$HOME/data/postgres'
     export PGHOST=localhost
     alias start-pg='pg_ctl -l $PGDATA/server.log start'
     alias stop-pg='pg_ctl stop -m fast'
@@ -59,21 +59,22 @@
 ```
 
 ## 3. Get Started
-
-1. export the required variable `~./.start.sh`
+1. Set the current user permission to the project root.
+  ``sudo chown -R $USER ./blockscout``
+2. export the required variable `~./.start.sh`
     `updated the .start.sh content based on the requirement`
-2. setup explorer
+3. setup explorer
 ``` 
     cd apps/explorer
     mix do deps.get, local.rebar, deps.compile, compile    
     mix ecto.create && mix ecto.migrate
-```
-3. setup blockscout web
+``` 
+4. setup blockscout web
 ``` 
     cd apps/block_scout_web
     cd assets && npm install && cd ..
-    mix phx.server
-```
+    mix phx.server // (This can be run from this directory or the project root: the project root is recommended.)
 
-Server will be listening on `http://localhost:4000/`
+```
+Now you can visit `http://localhost:4000/` from your browser.
 
