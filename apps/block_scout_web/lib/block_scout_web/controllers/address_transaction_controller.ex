@@ -68,7 +68,7 @@ defmodule BlockScoutWeb.AddressTransactionController do
             %Chain.Transaction{} = transaction ->
               View.render_to_string(
                 TransactionView,
-                "_rows.html",
+                "_row.html",
                 conn: conn,
                 current_address: address,
                 transaction: transaction,

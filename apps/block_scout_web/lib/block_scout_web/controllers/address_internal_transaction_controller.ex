@@ -44,7 +44,7 @@ defmodule BlockScoutWeb.AddressInternalTransactionController do
         Enum.map(internal_transactions, fn internal_transaction ->
           View.render_to_string(
             InternalTransactionView,
-            "_tile.html",
+            "_row.html",
             current_address: address,
             internal_transaction: internal_transaction
           )

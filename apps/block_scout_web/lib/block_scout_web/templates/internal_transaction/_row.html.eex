@@ -1,0 +1,31 @@
+<tr class=" tx-row-type-internal-transaction fade-in" data-test="internal_transaction" data-key="<%= @internal_transaction.transaction_hash %>_<%= @internal_transaction.index %>" data-internal-transaction-transaction-hash="<%= @internal_transaction.transaction_hash %>" data-internal-transaction-index="<%= @internal_transaction.index %>">
+    <td class="txs-td txs-cell">
+       <span class="tile-status-label ml-2 ml-md-0" data-internal-transaction-type="<%= type(@internal_transaction) %>"><%= type(@internal_transaction) %></span>
+    </td>
+    <td class="txs-td txs-cell">
+        <%= render BlockScoutWeb.TransactionView, "_link.html", transaction_hash: @internal_transaction.transaction_hash %>
+    </td>
+    <td class="txs-td txs-cell">
+        <%= link(
+          gettext("%{number}", number: to_string(@internal_transaction.block_number)),
+          to: block_path(BlockScoutWeb.Endpoint, :show, @internal_transaction.block_number)
+        ) %>
+    </td>
+    <td class="txs-td txs-cell">
+      <span class="mr-2 mr-md-0 order-2" in-tile data-from-now="<%= @internal_transaction.transaction.block.timestamp %>"></span>
+    </td>
+    <td class="txs-td txs-cell">
+     <%= @internal_transaction |> BlockScoutWeb.AddressView.address_partial_selector(:from, assigns[:current_address]) |> BlockScoutWeb.RenderHelpers.render_partial() %>
+    </td>
+    <td class="txs-td txs-cell">
+     &rarr;
+    </td>
+    <td class="txs-td txs-cell">
+     <%= @internal_transaction |> BlockScoutWeb.AddressView.address_partial_selector(:to, assigns[:current_address]) |> BlockScoutWeb.RenderHelpers.render_partial() %>
+    </td>
+    <td class="txs-td txs-cell">
+      <span class="tile-title">
+          <%= BlockScoutWeb.TransactionView.value(@internal_transaction, include_label: false) %> <%= gettext "Ether" %>
+        </span>
+    </td>
+</tr>

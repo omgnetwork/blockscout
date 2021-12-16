@@ -1,0 +1,57 @@
+<tr class=" tx-row-type-<%= String.downcase(@block_type) %> fade-up" data-selector="block-tile" data-block-number="<%= to_string(@block.number) %>" data-block-hash="<%= @block.hash %>">
+    <td class="txs-td txs-cell">
+        <%= if @block_type == "Block" do %>
+        <%= link(
+              class: "tile-label",
+              to: block_path(BlockScoutWeb.Endpoint, :show, @block),
+              "data-selector": "block-number"
+            ) do %>
+            <%= @block %>
+          <% end %>
+      <% else %>
+        <%= link(
+              class: "tile-label",
+              to: block_path(BlockScoutWeb.Endpoint, :show, @block.hash),
+              "data-selector": "block-number"
+            ) do %>
+            <%= @block %>
+          <% end %>
+      <% end %>    
+    </td>
+    <td class="txs-td txs-cell">
+        <span data-from-now="<%= @block.timestamp %>"></span>
+    </td>
+    <td class="txs-td txs-cell">
+        <span class="mr-2">
+          <%= ngettext("%{count}", "%{count} transactions", Enum.count(@block.transactions)) %>
+        </span>
+    </td>
+    <td class="txs-td txs-cell text-nowrap text-truncate">
+        <%= render BlockScoutWeb.AddressView,
+          "_link.html",
+          address: @block.miner,
+          contract: false,
+          use_custom_tooltip: false %>
+    </td>
+    <td class="txs-td txs-cell">
+        <!-- Gas Used -->
+      <div class="mr-3 mr-md-0">
+        <%= formatted_gas(@block.gas_used) %>
+        (<%= formatted_gas(Decimal.to_integer(@block.gas_used) / Decimal.to_integer(@block.gas_limit), format: "#.#%") %>)
+      </div>
+      <!-- Progress bar -->
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: <%= formatted_gas(Decimal.to_integer(@block.gas_used) / Decimal.to_integer(@block.gas_limit), format: "#.#%") %>;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+        </div>
+      </div>
+    </td>
+    <td class="txs-td txs-cell">
+        <span> <%= formatted_gas(@block.gas_limit) %>  </span>
+    </td>
+    <td class="txs-td txs-cell">
+        <%= if @block.size do %>
+            <!-- size -->
+            <span class="mr-2"> <%= Cldr.Unit.new(:byte, @block.size) |> cldr_unit_to_string!() %> </span>
+        <% end %>
+    </td>
+</tr>

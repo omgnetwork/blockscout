@@ -50,19 +50,80 @@
           </div>
         </div>
 
-        <button data-error-message class="alert alert-danger col-12 text-left" style="display: none;">
-          <span href="#" class="alert-link"><%= gettext("Something went wrong, click to reload.") %></span>
-        </button>
-        <div data-empty-response-message style="display: none;">
-          <div class="tile tile-muted text-center">
-            <span data-selector="empty-internal-transactions-list"><%= gettext "There are no internal transactions for this address." %></span>
+        <div class="table-container">
+          <div class="txs-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Txn Hash
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Method
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Block
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Age
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                From
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                To
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Value
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Txn Fee
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr data-error-message style="display: none;">
+                      <td colspan="9" style="padding: 20px">
+                         <button class="alert alert-danger col-12 text-left">
+                            <span href="#" class="alert-link"><%= gettext("Something went wrong, click to reload.") %></span>
+                          </button>
+                      </td>
+                  </tr>
+                  <tr data-empty-response-message style="display: none;">
+                      <td colspan="9" style="padding: 20px">
+                        <div class="tile tile-muted text-center">
+                          <span data-selector="empty-internal-transactions-list"><%= gettext "There are no internal transactions for this address." %></span>
+                        </div>
+                      </td>
+                  </tr>
+                </tbody>
+                <tbody data-items>
+                    <%= render BlockScoutWeb.CommonComponentsView, "_txs-table-loader.html" %>
+                </tbody>
+            </table>
           </div>
         </div>
 
-        <div data-items>
-          <%= render BlockScoutWeb.CommonComponentsView, "_tile-loader.html" %>
-        </div>
-
+    
         <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "bottom", cur_page_number: "1", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
 
       </div>

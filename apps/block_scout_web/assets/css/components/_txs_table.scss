@@ -216,3 +216,17 @@ $txs-link-color: $primary !default;
     }
   }
 }
+
+/* Progress bar */
+.progress {
+  background-color: #f5f6fa;
+  border-radius: 3px;
+  height: 6px;
+  margin-top: 8px;
+  width: 80%;
+
+  .progress-bar {
+    background-color: $tile-type-progress-bar-color;
+    border-radius: 3px;
+  }
+}

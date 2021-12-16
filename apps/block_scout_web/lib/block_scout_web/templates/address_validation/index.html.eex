@@ -12,24 +12,85 @@
             <a href="#" class="alert-link"><%= gettext "Connection Lost, click to load newer validations" %></a>
           </div>
         </div>
-        <h2 class="card-title"><%=gettext("Blocks Validated")%></h2>
+        <div class="clearfix">
+          <h2 class="card-title"><%=gettext("Blocks Validated")%></h2>
 
-        <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "top", cur_page_number: "1", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
-
-        <div data-empty-response-message class="tile tile-muted text-center" style="display: none;">
-          <span><%= gettext "There are no blocks validated by this address." %></span>
+          <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "top", cur_page_number: "1", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
         </div>
-        <button data-error-message class="alert alert-danger col-12 text-left" style="display: none;">
-          <span class="alert-link">
-            <%= gettext "Something went wrong, click to reload." %>
-          </span>
-        </button>
-        <div data-items data-selector="validations-list">
-          <%= render BlockScoutWeb.CommonComponentsView, "_tile-loader.html" %>
+        
+       <div class="table-container">
+          <div class="txs-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Block
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Age
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Txn
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Hash
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Gas Used	
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Gas Limit	
+                            </div>
+                        </th>
+                        <th class="txs-table-th">
+                            <div class="txs-table-th-content">
+                                Size
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr data-error-message style="display: none;">
+                      <td colspan="9" style="padding: 20px">
+                         <button class="alert alert-danger col-12 text-left">
+                            <span href="#" class="alert-link"><%= gettext("Something went wrong, click to reload.") %></span>
+                          </button>
+                      </td>
+                  </tr>
+                  <tr data-selector="channel-disconnected-message" style="display: none;">
+                      <td colspan="9" style="padding: 20px">
+                        <div data-selector="reload-button" class="alert alert-danger">
+                            <a href="#" class="alert-link"><%= gettext "Connection Lost, click to load newer blocks" %></a>
+                        </div>
+                      </td>
+                  </tr>
+                  <tr data-empty-response-message style="display: none;">
+                      <td colspan="9" style="padding: 20px">
+                        <div class="tile tile-muted text-center" data-selector="empty-transactions-list">
+                          <span><%= gettext "There are no blocks validated by this address." %></span>
+                        </div>
+                      </td>
+                  </tr>
+                </tbody>
+                <tbody data-items data-selector="validations-list">
+                  <%= render BlockScoutWeb.CommonComponentsView, "_block-table-loader.html" %>
+                </tbody>
+            </table>
+          </div>
         </div>
-
+        
         <%= render BlockScoutWeb.CommonComponentsView, "_pagination_container.html", position: "bottom", cur_page_number: "1", show_pagination_limit: true, data_next_page_button: true, data_prev_page_button: true %>
-
       </div> <!-- Card Body -->
     </div> <!-- Card -->
     <script defer data-cfasync="false" src="<%= static_path(@conn, "/js/address-validations.js") %>"></script>
