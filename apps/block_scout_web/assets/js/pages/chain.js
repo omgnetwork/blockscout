@@ -85,8 +85,6 @@ function baseReducer (state = initialState, action) {
       return Object.assign({}, state, { blocksError: true, blocksLoading: false })
     }
     case 'RECEIVED_NEW_EXCHANGE_RATE': {
-      console.log(state);
-      console.log(action);
       return Object.assign({}, state, {
         availableSupply: action.msg.exchangeRate.availableSupply,
         usdMarketCap: action.msg.exchangeRate.marketCapUsd,
@@ -94,8 +92,7 @@ function baseReducer (state = initialState, action) {
       })
     }
     case 'RECEIVED_NEW_GAS_PRICES': {
-      console.log(state);
-      console.log(action);
+      console.log(['RECEIVED_NEW_GAS_PRICES', state, action]);
       return Object.assign({}, state, {
         gasPriceL1: action.msg.gasPrice.gasPriceL1,
         gasPriceL2: action.msg.gasPrice.gasPriceL2,

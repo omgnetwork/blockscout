@@ -15,14 +15,14 @@ defmodule EthereumJSONRPC.FetchedGasPrice do
   @spec from_response(%{id: id, result: String.t()}) ::
           {:ok, params()}
         when id: non_neg_integer()
-  def from_response(%{id: id, result: fetched_gas_price_quantity})
+  def from_response(%{id: id, result: fetched_gas_price_quantity}) do
     {:ok,
      %{
        value: quantity_to_integer(fetched_gas_price_quantity)
      }}
   end
 
-  @spec from_response(%{id: id, error: %{code: code, message: message}}) :: 
+  @spec from_response(%{id: id, error: %{code: code, message: message}}) ::
           {:error, %{code: code, message: message}}
         when id: non_neg_integer(),
              code: integer(),
