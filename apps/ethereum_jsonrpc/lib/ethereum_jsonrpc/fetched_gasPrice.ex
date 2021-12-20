@@ -27,7 +27,7 @@ defmodule EthereumJSONRPC.FetchedGasPrice do
         when id: non_neg_integer(),
              code: integer(),
              message: String.t()
-  def from_response(%{id: id, error: %{code: code, message: message} = error})
+  def from_response(%{id: id, error: %{code: code, message: message} = error}) do
     {:error}
   end
 
