@@ -45,9 +45,21 @@ defmodule Explorer.GasPrice.History.Cataloger do
   @impl GenServer
   # Record fetch successful.
   def handle_info({_ref, {_, {:ok, records}}}, state) do
-    GasPrice.bulk_insert_history(records)
-    # Need to fix this issue
-    #GasPrice.bulk_update_history(records)
+    recent_gas_price_history = GasPrice.fetch_recent_history()
+
+    if length(recent_gas_price_history) == 0 do
+      GasPrice.bulk_insert_history(records)
+    else
+      sorted = Enum.sort(recent_gas_price_history, fn(x,y) -> Date.compare(x.date, y.date) == :gt end)
+      latest_date = Enum.at(sorted, 0).date
+      if Date.compare(latest_date, Date.utc_today()) == :eq do
+        Logger.info(fn -> "Updating gas price history" end)
+        GasPrice.bulk_update_history(records)
+      else
+        Logger.info(fn -> "Inserting gas price history" end)
+        GasPrice.bulk_insert_history(records)
+      end
+    end
 
     # Schedule next check for history
     fetch_after = config_or_default(:history_fetch_interval, :timer.minutes(15))

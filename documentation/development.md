@@ -40,8 +40,8 @@
     export PATH="/opt/homebrew/opt/erlang@23/bin:$PATH"
     export LDFLAGS="-L/opt/homebrew/opt/erlang@23/lib"
   ```
-    
-- install rustc 
+
+- install rustc
     ``` curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\ ```
     update bash profile with
     ```
@@ -53,7 +53,7 @@
 
 
 ## 2. Setup
-1. start postgresql 
+1. start postgresql
 ```
     pg-start // will work if above configuration has been setup in bashrc
 ```
@@ -64,17 +64,19 @@
 2. export the required variable `~./.start.sh`
     `updated the .start.sh content based on the requirement`
 3. setup explorer
-``` 
+```
     cd apps/explorer
-    mix do deps.get, local.rebar, deps.compile, compile    
+    mix do deps.get, local.rebar, deps.compile, compile
     mix ecto.create && mix ecto.migrate
-``` 
+```
 4. setup blockscout web
-``` 
+```
     cd apps/block_scout_web
     cd assets && npm install && cd ..
     mix phx.server // (This can be run from this directory or the project root: the project root is recommended.)
 
+    // The priv folder has to be rebuilt if you update the js files in the asset folder
+    cd apps/block_scout_web/priv/static && rm -rf js && cd ../../../.. &&  cd apps/block_scout_web/assets && npm run build && cd ../../.. && mix phx.server
 ```
 Now you can visit `http://localhost:4000/` from your browser.
 

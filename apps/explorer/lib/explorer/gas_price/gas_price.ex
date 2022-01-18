@@ -24,9 +24,17 @@ defmodule Explorer.GasPrice do
     Repo.insert_all(GasPriceHistory, records, on_conflict: :nothing, conflict_target: [:date])
   end
 
-  def bulk_update_history(GasPriceHistory) do
+  def bulk_update_history(records) do
     date = Date.utc_today()
-    Repo.update_all(from(record in GasPriceHistory, where: record.date == ^date), set: [])
+    record = Enum.at(records, 0)
+    Repo.update_all(
+      from(
+        record in GasPriceHistory,
+        where: record.date == ^date,
+        update: [set: [gas_price_l1: ^record.gas_price_l1, gas_price_l2: ^record.gas_price_l2]]
+      ),
+        []
+    )
   end
 
   def gas_price_to_gwei(gas_price) do
