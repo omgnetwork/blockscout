@@ -11,3 +11,4 @@ export ETHEREUM_L1_JSONRPC_HTTP_URL=https://rinkeby.infura.io/v3/KEY
 export BLOCKSCOUT_VERSION=1.0.0
 export SHOW_GAS_PRICE_CHART=true
 export SHOW_PRICE_CHART=false
+

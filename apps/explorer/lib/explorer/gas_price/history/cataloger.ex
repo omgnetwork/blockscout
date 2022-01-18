@@ -47,10 +47,10 @@ defmodule Explorer.GasPrice.History.Cataloger do
   def handle_info({_ref, {_, {:ok, records}}}, state) do
     recent_gas_price_history = GasPrice.fetch_recent_history()
 
-    if length(recent_gas_price_history) == 0 do
+    if Enum.empty?(recent_gas_price_history) do
       GasPrice.bulk_insert_history(records)
     else
-      sorted = Enum.sort(recent_gas_price_history, fn(x,y) -> Date.compare(x.date, y.date) == :gt end)
+      sorted = Enum.sort_by(recent_gas_price_history, &(&1.date), {:desc, Date})
       latest_date = Enum.at(sorted, 0).date
       if Date.compare(latest_date, Date.utc_today()) == :eq do
         Logger.info(fn -> "Updating gas price history" end)
