@@ -63,7 +63,9 @@
   ``sudo chown -R $USER ./blockscout``
 2. export the required variable `~./.start.sh`
     `updated the .start.sh content based on the requirement`
-3. setup explorer
+4. source the `.start.sh` file 
+    `source ./.start.sh`
+5. setup explorer
 ```
     cd apps/explorer
     mix do deps.get, local.rebar, deps.compile, compile
@@ -79,4 +81,3 @@
     cd apps/block_scout_web/priv/static && rm -rf js && cd ../../../.. &&  cd apps/block_scout_web/assets && npm run build && cd ../../.. && mix phx.server
 ```
 Now you can visit `http://localhost:4000/` from your browser.
-
