@@ -4,9 +4,9 @@
       <div class="dashboard-search">
         <div class="dashboard-title">
           <h1><%= gettext("The Boba Blockchain Explorer")%></h1>
-        </div>  
+        </div>
       </div>
-      <div class="dashboard-search-container"> 
+      <div class="dashboard-search-container">
         <%= render BlockScoutWeb.LayoutView, "_search.html", conn: @conn, id: "main-search-autocomplete", additional_classes: ["mobile-search-hide"] %>
       </div>
       <div class="dashboard-banner-content">
@@ -32,13 +32,23 @@
                     width="350" height="152">
             </canvas>
           </div>
+
+          <div data-chart="historyChart"
+                    data-history_chart_paths=
+                    '{<%= for {{key, value}, x} <- Enum.with_index(@chart_data_paths) do %>
+                          "<%= key %>":"<%= value %>"
+                          <%= if x<(map_size(@chart_data_paths)-1) do %>
+                          ,
+                          <% end %>
+                    <% end %>}'
+                    data-history_chart_config = '<%= @chart_config_json %>'></div>
           <!-- Legend -->
           <script>
           numChartData = <%= Enum.reduce(@chart_config, 0, fn (source, acc) ->
                           acc + length(elem(source, 1)) end) %>
           document.documentElement.style.setProperty("--numChartData", numChartData);
           </script>
-          
+
         </div>
         <!-- Stats -->
         <div class="dashboard-banner-network-plain-container">
@@ -124,7 +134,7 @@
         <div hidden data-selector="loading-message" class="col-lg-12" >
          <div data-selector="chain-block">
            <div class="tile tile-type-block n-p d-flex flex-column">
-             <a class="tile-title"><span class="tile-loader tile-label-loader"></span> </a> 
+             <a class="tile-title"><span class="tile-loader tile-label-loader"></span> </a>
              <div class="tile-bottom-contents">
                <div class="dark-block-loader"></div>
                <div class="dark-block-loader"></div>
@@ -135,7 +145,7 @@
         <div hidden data-selector="loading-message" class="col-lg-12" >
          <div data-selector="chain-block">
            <div class="tile tile-type-block n-p d-flex flex-column">
-             <a class="tile-title"><span class="tile-loader tile-label-loader"></span> </a> 
+             <a class="tile-title"><span class="tile-loader tile-label-loader"></span> </a>
              <div class="tile-bottom-contents">
                <div class="dark-block-loader"></div>
                <div class="dark-block-loader"></div>
@@ -153,12 +163,12 @@
             </div>
            </div>
          </div>
-        </div>   
+        </div>
       </div>
     </div>
   </div>
 
-  
+
 
   <div class="card card-chain-transactions">
     <div class="card-body">

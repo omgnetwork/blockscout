@@ -11,8 +11,8 @@ defmodule BlockScoutWeb.GasPricesChannel do
   end
 
   def handle_out("new_prices", %{
-      gas_price_l1: gas_price_l1, 
-      gas_price_l2: gas_price_l2, 
+      gas_price_l1: gas_price_l1,
+      gas_price_l2: gas_price_l2,
       gas_price_history_data: gas_price_history_data
     }, socket) do
     push(socket, "new_prices", %{

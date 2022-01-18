@@ -93,8 +93,18 @@ tx_chart_config =
     %{}
   end
 
+gas_price_chart_config =
+  if System.get_env("SHOW_GAS_PRICE_CHART", "false") == "true" do
+    %{gas_price: [:gas_price_l1, :gas_price_l2]}
+  else
+    %{}
+  end
+
 config :block_scout_web,
-  chart_config: Map.merge(price_chart_config, tx_chart_config)
+  chart_config: Map.merge(gas_price_chart_config, Map.merge(price_chart_config, tx_chart_config))
+  # chart_config: Map.merge(tx_chart_config, gas_price_chart_config)
+  # chart_config: gas_price_chart_config
+  # chart_config: price_chart_config
 
 config :block_scout_web, BlockScoutWeb.Chain.TransactionHistoryChartController,
   # days

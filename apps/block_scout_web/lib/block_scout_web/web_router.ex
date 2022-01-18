@@ -28,6 +28,10 @@ defmodule BlockScoutWeb.WebRouter do
       only: [:show],
       singleton: true
     )
+    resources("/gas-price-history-chart", Chain.GasPriceHistoryChartController,
+      only: [:show],
+      singleton: true
+    )
 
     resources("/transaction-history-chart", Chain.TransactionHistoryChartController,
       only: [:show],
