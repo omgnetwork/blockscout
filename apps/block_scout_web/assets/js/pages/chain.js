@@ -184,6 +184,10 @@ const elements = {
       chart = window.dashboardChart
     },
     render (_$el, state, oldState) {
+
+      if (!chart || (oldState.gasPriceL1 === state.gasPriceL1 && oldState.gasPriceL2 === state.gasPriceL2)) return
+      chart.updateGasPriceHistory(state.gasPriceL1, state.gasPriceL2)
+
       if (!chart || (oldState.availableSupply === state.availableSupply && oldState.marketHistoryData === state.marketHistoryData) || !state.availableSupply) return
 
       chart.updateMarketHistory(state.availableSupply, state.marketHistoryData)
@@ -191,15 +195,6 @@ const elements = {
       if (!chart || (JSON.stringify(oldState.transactionStats) === JSON.stringify(state.transactionStats))) return
 
       chart.updateTransactionHistory(state.transactionStats)
-    }
-  },
-  '[data-chart="gasPriceChart"]': {
-    load () {
-      chart = window.dashboardGasPriceChart
-    },
-    render (_$el, state, oldState) {
-      if (!chart || (oldState.gasPriceL1 === state.gasPriceL1 && oldState.gasPriceL2 === state.gasPriceL2)) return
-      chart.updateGasPriceHistory(state.gasPriceL1, state.gasPriceL2)
     }
   },
   '[data-selector="transaction-count"]': {
@@ -340,6 +335,7 @@ if ($chainDetailsPage.length) {
   const gasPriceChannel = socket.channel('gas_prices:new_prices')
   gasPriceChannel.join()
   gasPriceChannel.on('new_prices', (msg) => {
+    console.log(msg)
     //may need something like this too
     //updateAllCalculatedGasPrices(humps.camelizeKeys(msg).gasPrices.usdValue)
     store.dispatch({

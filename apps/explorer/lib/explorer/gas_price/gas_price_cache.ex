@@ -80,7 +80,7 @@ defmodule Explorer.GasPrice.GasPriceHistoryCache do
   defp gas_price_history_cache_period do
     case Integer.parse(System.get_env("GAS_PRICE_HISTORY_CACHE_PERIOD", "")) do
       {secs, ""} -> :timer.seconds(secs)
-      _ -> :timer.hours(6)
+      _ -> :timer.minutes(1)
     end
   end
 end
