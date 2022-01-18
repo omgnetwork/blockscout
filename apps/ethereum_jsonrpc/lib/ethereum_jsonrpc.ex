@@ -36,7 +36,8 @@ defmodule EthereumJSONRPC do
     RequestCoordinator,
     Subscription,
     Transport,
-    Variant
+    Variant,
+    FetchedGasPrice
   }
 
   @default_throttle_timeout :timer.minutes(2)
@@ -269,6 +270,20 @@ defmodule EthereumJSONRPC do
 
     case result do
       {:ok, bin_number} -> {:ok, String.to_integer(bin_number)}
+      other -> other
+    end
+  end
+
+
+  @spec fetch_gas_price(json_rpc_named_arguments) :: {:ok, non_neg_integer()} | {:error, reason :: term}
+  def fetch_gas_price(json_rpc_named_arguments) do
+    result =
+      %{id: 0, method: "eth_gasPrice", params: []}
+      |> request()
+      |> json_rpc(json_rpc_named_arguments)
+
+    case result do
+      {:ok, bin_number} -> {:ok, quantity_to_integer(bin_number)}
       other -> other
     end
   end

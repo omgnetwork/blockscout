@@ -21,6 +21,9 @@ export const initialState = {
   availableSupply: null,
   averageBlockTime: null,
   marketHistoryData: null,
+  gasPriceL1: null,
+  gasPriceL2: null,
+  gasPriceHistoryData: null,
   blocks: [],
   blocksLoading: true,
   blocksError: false,
@@ -82,12 +85,18 @@ function baseReducer (state = initialState, action) {
       return Object.assign({}, state, { blocksError: true, blocksLoading: false })
     }
     case 'RECEIVED_NEW_EXCHANGE_RATE': {
-      console.log(state);
-      console.log(action);
       return Object.assign({}, state, {
         availableSupply: action.msg.exchangeRate.availableSupply,
+        usdMarketCap: action.msg.exchangeRate.marketCapUsd,
         marketHistoryData: action.msg.marketHistoryData,
-        usdMarketCap: action.msg.exchangeRate.marketCapUsd
+      })
+    }
+    case 'RECEIVED_NEW_GAS_PRICES': {
+      console.log(['RECEIVED_NEW_GAS_PRICES', state, action]);
+      return Object.assign({}, state, {
+        gasPriceL1: action.msg.gasPrice.gasPriceL1,
+        gasPriceL2: action.msg.gasPrice.gasPriceL2,
+        gasPriceHistoryData: action.msg.gasPriceHistoryData,
       })
     }
     case 'RECEIVED_NEW_TRANSACTION_BATCH': {
@@ -175,6 +184,10 @@ const elements = {
       chart = window.dashboardChart
     },
     render (_$el, state, oldState) {
+
+      if (!chart || (oldState.gasPriceL1 === state.gasPriceL1 && oldState.gasPriceL2 === state.gasPriceL2)) return
+      chart.updateGasPriceHistory(state.gasPriceL1, state.gasPriceL2)
+
       if (!chart || (oldState.availableSupply === state.availableSupply && oldState.marketHistoryData === state.marketHistoryData) || !state.availableSupply) return
 
       chart.updateMarketHistory(state.availableSupply, state.marketHistoryData)
@@ -315,6 +328,18 @@ if ($chainDetailsPage.length) {
     updateAllCalculatedUsdValues(humps.camelizeKeys(msg).exchangeRate.usdValue)
     store.dispatch({
       type: 'RECEIVED_NEW_EXCHANGE_RATE',
+      msg: humps.camelizeKeys(msg)
+    })
+  })
+
+  const gasPriceChannel = socket.channel('gas_prices:new_prices')
+  gasPriceChannel.join()
+  gasPriceChannel.on('new_prices', (msg) => {
+    console.log(msg)
+    //may need something like this too
+    //updateAllCalculatedGasPrices(humps.camelizeKeys(msg).gasPrices.usdValue)
+    store.dispatch({
+      type: 'RECEIVED_NEW_GAS_PRICES',
       msg: humps.camelizeKeys(msg)
     })
   })

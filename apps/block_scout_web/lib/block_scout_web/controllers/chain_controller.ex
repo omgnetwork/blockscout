@@ -37,7 +37,8 @@ defmodule BlockScoutWeb.ChainController do
 
     chart_data_paths = %{
       market: market_history_chart_path(conn, :show),
-      transaction: transaction_history_chart_path(conn, :show)
+      transaction: transaction_history_chart_path(conn, :show),
+      gas_price: gas_price_history_chart_path(conn, :show),
     }
 
     chart_config = Application.get_env(:block_scout_web, :chart_config, %{})
