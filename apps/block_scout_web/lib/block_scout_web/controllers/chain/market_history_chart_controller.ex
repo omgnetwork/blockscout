@@ -7,7 +7,6 @@ defmodule BlockScoutWeb.Chain.MarketHistoryChartController do
   def show(conn, _params) do
     if ajax?(conn) do
       exchange_rate = Market.get_exchange_rate(Explorer.coin()) || Token.null()
-
       recent_market_history = Market.fetch_recent_history()
 
       market_history_data =

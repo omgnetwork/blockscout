@@ -50,7 +50,7 @@ defmodule BlockScoutWeb.TransactionInternalTransactionController do
         |> Enum.map(fn internal_transaction ->
           View.render_to_string(
             InternalTransactionView,
-            "_tile.html",
+            "_row.html",
             internal_transaction: internal_transaction
           )
         end)

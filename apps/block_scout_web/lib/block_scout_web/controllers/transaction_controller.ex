@@ -43,7 +43,7 @@ defmodule BlockScoutWeb.TransactionController do
           Enum.map(transactions, fn transaction ->
             View.render_to_string(
               TransactionView,
-              "_tile.html",
+              "_row.html",
               transaction: transaction,
               burn_address_hash: @burn_address_hash,
               conn: conn

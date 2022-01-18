@@ -1,7 +1,13 @@
 <% status = transaction_status(@transaction) %>
-<div class="tile tile-type-<%= type_suffix(@transaction) %> fade-in <%= status_class(@transaction) %>" data-test="<%= type_suffix(@transaction) %>" data-identifier-hash="<%= @transaction.hash %>">
+<div class="tile tile-boba tile-type-<%= type_suffix(@transaction) %> fade-in <%= status_class(@transaction) %>" data-test="<%= type_suffix(@transaction) %>" data-identifier-hash="<%= @transaction.hash %>">
+  <div class="tile-type-block">
+    <div class="tile-type">
+      Tx
+    </div>
+  </div>
   <div class="row tile-body" data-selector="token-transfers-toggle" data-test="chain_transaction">
     <!-- Color Block -->
+    
     <div class="tile-transaction-type-block col-md-2 d-flex flex-row flex-md-column">
       <span class="tile-label" data-test="transaction_type">
         <%= transaction_display_type(@transaction) %>
@@ -16,9 +22,10 @@
         <%= formatted_result(status) %>
       </span>
     </div>
+    
     <!-- Content -->
     <div class="col-md-7 col-lg-8 d-flex flex-column pr-2 pr-sm-2 pr-md-0">
-      <span>
+      
       <div class="text-truncate d-flex">
         <%= render "_link.html", transaction_hash: @transaction.hash, data_test: "address_hash_link" %>
         <% method_name = Transaction.get_method_name(@transaction) %>
@@ -26,7 +33,7 @@
           <%= render BlockScoutWeb.FormView, "_tag.html", text: method_name, additional_classes: ["method", "ml-1"] %>
         <% end %>
       </div>
-      </span>
+      
       <span>
         <%= @transaction |> BlockScoutWeb.AddressView.address_partial_selector(:from, assigns[:current_address]) |> BlockScoutWeb.RenderHelpers.render_partial() %>
         &rarr;

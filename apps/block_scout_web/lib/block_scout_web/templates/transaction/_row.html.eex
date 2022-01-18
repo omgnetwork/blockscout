@@ -1,0 +1,52 @@
+<% status=transaction_status(@transaction) %>
+<tr class=" tx-row-type-<%= type_suffix(@transaction) %> fade-in <%= status_class(@transaction) %>"
+data-test="<%= type_suffix(@transaction) %>" data-identifier-hash="<%= @transaction.hash %>">
+    <td class="txs-td txs-cell">
+        <%= render "_link.html", transaction_hash: @transaction.hash, data_test: "address_hash_link" %>
+    </td>
+    <td class="txs-td txs-cell">
+        <% method_name=Transaction.get_method_name(@transaction) %>
+        <%= if method_name do %>
+            <%= render BlockScoutWeb.FormView, "_tag.html" , text: method_name, additional_classes: ["method", "ml-1" ] %>
+            <% end %>
+    </td>
+    <td class="txs-td txs-cell">
+        <%= @transaction |> block_number() |> BlockScoutWeb.RenderHelpers.render_partial() %>
+    </td>
+    <td class="txs-td txs-cell">
+        <span class="mr-2 mr-md-0 order-2" in-tile data-from-now="<%= block_timestamp(@transaction) %>"></span>
+    </td>
+    <td class="txs-td txs-cell">
+        <%= @transaction |> BlockScoutWeb.AddressView.address_partial_selector(:from, assigns[:current_address]) |>
+        BlockScoutWeb.RenderHelpers.render_partial() %>
+    </td>
+
+    <td class="txs-td txs-cell">
+        <%= if from_or_to_address?(@transaction, assigns[:current_address]) do %>
+        <span class="mr-2 mr-md-0 order-0 order-md-3">
+            <%= if @transaction.from_address_hash==assigns[:current_address].hash do %>
+            <span data-test="transaction_type" class="badge badge-danger tile-badge">
+                <%= gettext "OUT" %>
+            </span>
+            <% else %>
+                <span data-test="transaction_type" class="badge badge-success tile-badge">
+                <%= gettext "IN" %>
+                </span>
+                <% end %>
+        </span>
+        <% end %>
+    </td>
+    <td class="txs-td txs-cell">
+        <%= @transaction |> BlockScoutWeb.AddressView.address_partial_selector(:to, assigns[:current_address]) |>
+        BlockScoutWeb.RenderHelpers.render_partial() %>
+    </td>
+    <td class="txs-td txs-cell">
+        <%= value(@transaction, include_label: false) %>
+        <%= gettext "Ether" %>
+    </td>
+    <td class="txs-td txs-cell">
+        <span class="ml-0 ml-md-1 text-nowrap">
+            <%= formatted_fee(@transaction, denomination: :ether, include_label: false) %>
+        </span>
+    </td>
+</tr>

@@ -102,6 +102,8 @@ export function asyncReducer (state = asyncInitialState, action) {
         prevPagePath = state.pagesStack[state.pagesStack.length - 2]
       }
 
+      console.log(['action.items', action.items])
+
       return Object.assign({}, state, {
         requestError: false,
         emptyResponse: action.items.length === 0,
@@ -178,6 +180,7 @@ export const elements = {
   },
   '[data-async-listing] [data-items]': {
     render ($el, state, oldState) {
+      console.log(['state.items',state.items])
       if (state.items === oldState.items) return
 
       if (state.itemKey) {
@@ -325,6 +328,7 @@ export function refreshPage (store) {
 
 export function loadPage (store, path) {
   store.dispatch({ type: 'START_REQUEST', path })
+  console.log(['load state path',path])
   $.getJSON(path, merge({ type: 'JSON' }, store.getState().additionalParams))
     .done(response => store.dispatch(Object.assign({ type: 'ITEMS_FETCHED' }, humps.camelizeKeys(response))))
     .fail(() => store.dispatch({ type: 'REQUEST_ERROR' }))

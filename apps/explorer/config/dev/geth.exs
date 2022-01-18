@@ -10,6 +10,15 @@ config :explorer,
     ],
     variant: EthereumJSONRPC.Geth
   ],
+  json_l1_rpc_named_arguments: [
+    transport: EthereumJSONRPC.HTTP,
+    transport_options: [
+      http: EthereumJSONRPC.HTTP.HTTPoison,
+      url: System.get_env("ETHEREUM_L1_JSONRPC_HTTP_URL"),
+      http_options: [recv_timeout: :timer.minutes(1), timeout: :timer.minutes(1), hackney: [pool: :ethereum_jsonrpc]]
+    ],
+    variant: EthereumJSONRPC.Geth
+  ],
   subscribe_named_arguments: [
     transport: EthereumJSONRPC.WebSocket,
     transport_options: [

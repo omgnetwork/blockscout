@@ -6,6 +6,7 @@ import numeral from 'numeral'
 import moment from 'moment'
 import { formatUsdValue } from '../lib/currency'
 import sassVariables from '../../css/app.scss'
+import { maxBy } from 'lodash'
 
 Chart.defaults.font.family = 'Nunito, "Helvetica Neue", Arial, sans-serif,"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
 Chart.register(LineController, LineElement, PointElement, LinearScale, TimeScale, Title, Tooltip)
@@ -23,7 +24,7 @@ function xAxe (fontColor) {
     time: {
       unit: 'day',
       tooltipFormat: 'YYYY-MM-DD',
-      stepSize: 14
+      stepSize: 5
     },
     ticks: {
       color: fontColor
@@ -89,7 +90,26 @@ const config = {
           maxTicksLimit: 4,
           color: sassVariables.dashboardBannerChartAxisFontColor
         }
-      }
+      },
+      l1GasPrice: {
+        position: 'left',
+        grid: grid,
+        ticks: {
+          beginAtZero: true,
+          callback: (value, _index, _values) => `${numeral(value).format('0,0')} GWEI`,
+          color: sassVariables.dashboardBannerChartAxisFontColor,
+        }
+      },
+      l2GasPrice: {
+        position: 'right',
+        grid: grid,
+        ticks: {
+          display: false,
+          beginAtZero: true,
+          callback: (value, _index, _values) => `${numeral(value).format('0,0')} GWEI`,
+          color: sassVariables.dashboardBannerChartAxisFontColor,
+        }
+      },
     },
     plugins: {
       legend: legend,
@@ -106,6 +126,8 @@ const config = {
               return `${label}: ${formatUsdValue(parsed.y)}`
             } else if (context.dataset.yAxisID === 'numTransactions') {
               return `${label}: ${formattedValue}`
+            } else if (context.dataset.yAxisID === 'l1GasPrice' || context.dataset.yAxisID === 'l2GasPrice') {
+              return `${label}: ${parsed.y.toFixed(2)} GWEI`
             } else {
               return formattedValue
             }
@@ -165,6 +187,24 @@ function getMarketCapData (marketHistoryData, availableSupply) {
   return data
 }
 
+function getL1GasPriceHistoryData (gasPriceHistory) {
+  if (gasPriceHistory.length === 0) {
+    return getDataFromLocalStorage('l1GasPriceHistoryData')
+  }
+  const data = gasPriceHistory.map(dataPoint => ({ x: dataPoint.date, y: dataPoint.gasPriceL1 }))
+  setDataToLocalStorage('l1GasPriceHistoryData', data)
+  return data
+}
+
+function getL2GasPriceHistoryData (gasPriceHistory) {
+  if (gasPriceHistory.length === 0) {
+    return getDataFromLocalStorage('l2GasPriceHistoryData')
+  }
+  const data = gasPriceHistory.map(dataPoint => ({ x: dataPoint.date, y: dataPoint.gasPriceL2 }))
+  setDataToLocalStorage('l2GasPriceHistoryData', data)
+  return data
+}
+
 // colors for light and dark theme
 const priceLineColor = sassVariables.dashboardLineColorPrice
 const mcapLineColor = sassVariables.dashboardLineColorMarket
@@ -175,6 +215,8 @@ class MarketHistoryChart {
 
     let priceActivated = true
     let marketCapActivated = true
+    let l1GasPriceActivated = true
+    let l2GasPriceActivated = true
 
     this.price = {
       label: window.localized.Price,
@@ -231,8 +273,68 @@ class MarketHistoryChart {
       this.numTransactions.borderColor = sassVariables.dashboardLineColorPrice
     }
 
+    this.l1GasPrice = {
+      label: 'L1 Gas Price',
+      yAxisID: 'l1GasPrice',
+      data: [],
+      cubicInterpolationMode: 'monotone',
+      fill: false,
+      pointRadius: 0,
+      backgroundColor: priceLineColor,
+      borderColor: priceLineColor
+      // lineTension: 0
+    }
+
+    if (dataConfig.gas_price === undefined || dataConfig.gas_price.indexOf('gas_price_l1') === -1) {
+      this.l1GasPrice.hidden = true
+      axes.l1GasPrice.display = false
+      l1GasPriceActivated = false
+    }
+
+    if (dataConfig.gas_price === undefined || dataConfig.gas_price.indexOf('gas_price_l1') === -1) {
+      this.l1GasPrice.hidden = true
+      axes.l1GasPrice.display = false
+    } else if (!l1GasPriceActivated) {
+      axes.l1GasPrice.position = 'left'
+      this.l1GasPrice.backgroundColor = sassVariables.dashboardLineColorPrice
+      this.l1GasPrice.borderColor = sassVariables.dashboardLineColorPrice
+    }
+
+    this.l2GasPrice = {
+      label: 'L2 Gas Price',
+      yAxisID: 'l2GasPrice',
+      data: [],
+      cubicInterpolationMode: 'monotone',
+      fill: false,
+      pointRadius: 0,
+      backgroundColor: mcapLineColor,
+      borderColor: mcapLineColor
+      // lineTension: 0
+    }
+
+    if (dataConfig.gas_price === undefined || dataConfig.gas_price.indexOf('gas_price_l2') === -1) {
+      this.l2GasPrice.hidden = true
+      axes.l2GasPrice.display = false
+      l2GasPriceActivated = false
+    }
+
+    if (dataConfig.gas_price === undefined || dataConfig.gas_price.indexOf('gas_price_l2') === -1) {
+      this.l2GasPrice.hidden = true
+      axes.l2GasPrice.display = false
+    } else if (!l2GasPriceActivated) {
+      axes.l2GasPrice.position = 'left'
+      this.l2GasPrice.backgroundColor = sassVariables.dashboardLineColorPrice
+      this.l2GasPrice.borderColor = sassVariables.dashboardLineColorPrice
+    }
+
     this.availableSupply = availableSupply
-    config.data.datasets = [this.price, this.marketCap, this.numTransactions]
+    config.data.datasets = [
+      this.price,
+      this.marketCap,
+      this.numTransactions,
+      this.l1GasPrice,
+      this.l2GasPrice
+    ]
 
     const isChartLoadedKey = 'isChartLoaded'
     const isChartLoaded = window.sessionStorage.getItem(isChartLoadedKey) === 'true'
@@ -261,12 +363,17 @@ class MarketHistoryChart {
     this.numTransactions.data = getTxHistoryData(transactionHistory)
     this.chart.update()
   }
+
+  updateGasPriceHistory(gasPriceHistory) {
+    this.l1GasPrice.data = getL1GasPriceHistoryData(gasPriceHistory)
+    this.l2GasPrice.data = getL2GasPriceHistoryData(gasPriceHistory)
+    this.chart.update()
+  }
 }
 
 export function createMarketHistoryChart (el) {
   const dataPaths = $(el).data('history_chart_paths')
   const dataConfig = $(el).data('history_chart_config')
-
   const $chartError = $('[data-chart-error-message]')
   const chart = new MarketHistoryChart(el, 0, [], dataConfig)
   Object.keys(dataPaths).forEach(function (historySource) {
@@ -274,7 +381,8 @@ export function createMarketHistoryChart (el) {
       .done(data => {
         switch (historySource) {
           case 'market': {
-            const availableSupply = JSON.parse(data.supply_data)
+            // const availableSupply = 2 // JSON.parse(data.supply_data)
+            const availableSupply=JSON.parse(data.supply_data)
             const marketHistoryData = humps.camelizeKeys(JSON.parse(data.history_data))
 
             $(el).show()
@@ -282,10 +390,20 @@ export function createMarketHistoryChart (el) {
             break
           }
           case 'transaction': {
-            const txsHistoryData = JSON.parse(data.history_data)
-
+            const txsHistoryData = JSON.parse(data.history_data).map((d)=>({...d, closing_price: d.closing_price + 10}))
             $(el).show()
             chart.updateTransactionHistory(txsHistoryData)
+            break
+          }
+          case 'gas_price': {
+            const gasPriceHistoryData = humps.camelizeKeys(JSON.parse(data.gas_price))
+            const l1GasPriceMax = Number(maxBy(gasPriceHistoryData, ele => Number(ele.gasPriceL1)).gasPriceL1)
+            config.options.scales.l1GasPrice.min = 0
+            config.options.scales.l1GasPrice.max = l1GasPriceMax + 50
+            config.options.scales.l2GasPrice.min = 0
+            config.options.scales.l2GasPrice.max = l1GasPriceMax + 50
+            $(el).show()
+            chart.updateGasPriceHistory(gasPriceHistoryData)
             break
           }
         }

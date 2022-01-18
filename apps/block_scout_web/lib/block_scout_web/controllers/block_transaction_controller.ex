@@ -61,7 +61,7 @@ defmodule BlockScoutWeb.BlockTransactionController do
 
             View.render_to_string(
               TransactionView,
-              "_tile.html",
+              "_row.html",
               transaction: transaction_with_transfers_filtered,
               burn_address_hash: @burn_address_hash,
               conn: conn

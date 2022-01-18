@@ -43,13 +43,13 @@ $tile-body-a-color: #5959d8 !default;
       color: inherit;
     }
 
-    .tile-transaction-type-block {
-      background-color: rgba($color, 0.1);
-      border-bottom: 1px solid $color;
-      border-right: 1px solid $color;
-      border-top: 1px solid $color;
-      color: $color;
-    }
+    // .tile-transaction-type-block {
+    //   background-color: rgba($color, 0.1);
+    //   border-bottom: 1px solid $color;
+    //   border-right: 1px solid $color;
+    //   border-top: 1px solid $color;
+    //   color: $color;
+    // }
   }
 }
 
@@ -72,13 +72,17 @@ $tile-body-a-color: #5959d8 !default;
 }
 
 .tile-transaction-type-block {
-  align-items: center;
+  align-items: flex-start;
   bottom: -17px;
   justify-content: center;
   margin-left: -1px;
   margin-top: -34px;
   padding: 0 5px;
   position: relative;
+
+  .tile-label {
+    white-space: nowrap;
+  }
 
   @include media-breakpoint-down(sm) {
     align-items: flex-start;
@@ -117,10 +121,13 @@ $tile-body-a-color: #5959d8 !default;
 }
 
 .tile-bottom-contents {
-  background-color: #f6f7f9;
+  // background-color: #f6f7f9;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   font-size: 12px;
   line-height: 1.2;
-  padding: 0.8rem 1rem;
+  padding: 0 0.8rem;
 }
 
 .tile-transactions {
@@ -166,6 +173,8 @@ $tile-body-a-color: #5959d8 !default;
   max-width: 140px;
 }
 
+
+
 .tile {
   span[data-address-hash] {
     color: $tile-body-a-color;
@@ -200,78 +209,143 @@ $tile-body-a-color: #5959d8 !default;
     }
   }
   border-radius: 4px;
-  border: 1px solid $border-color;
+  // border: 1px solid $border-color;
   color: $text-muted;
   flex-grow: 1;
   font-size: 12px;
   line-height: 1.4rem;
   padding: $tile-padding;
 
-  @include generate-tile-block(
-    ".tile-type-block",
-    $tile-type-block-color,
-    darken($tile-type-block-color, 20%)
-  );
-  @include generate-tile-block(".tile-type-uncle", $tile-type-uncle-color);
-  @include generate-tile-block(".tile-type-reorg", $tile-type-reorg-color);
-  @include generate-tile-block(
-    ".tile-type-emission-reward",
-    $tile-type-emission-reward-color
-  );
-  @include generate-tile-block(
-    ".tile-type-transaction",
-    $tile-type-transaction-color
-  );
-  @include generate-tile-block(
-    ".tile-type-contract-call",
-    $tile-type-contract-call-color
-  );
-  @include generate-tile-block(
-    ".tile-type-contract-creation",
-    $tile-type-contract-creation-color
-  );
-  @include generate-tile-block(
-    ".tile-type-token-transfer",
-    $tile-type-token-transfer-color
-  );
-  @include generate-tile-block(
-    ".tile-type-unique-token",
-    $tile-type-unique-token-color
-  );
-  @include generate-tile-block(
-    ".tile-type-unique-token-image",
-    $tile-type-unique-token-image-color
-  );
-  @include generate-tile-block(
-    ".tile-type-internal-transaction",
-    $tile-type-internal-transaction-color
-  );
-  @include generate-tile-block(
-    ".tile-type-api-documentation",
-    $tile-type-api-documentation-color
-  );
-  @include generate-tile-block(
-    '[class*="status--error"]',
-    $tile-status-error-reason
-  );
-  @include generate-tile-block(
-    ".tile-status--awaiting-internal-transactions",
-    $tile-status-awaiting-internal-transactions
-  );
+  // @include generate-tile-block(
+  //   ".tile-type-block",
+  //   $tile-type-block-color,
+  //   darken($tile-type-block-color, 20%)
+  // );
+  // @include generate-tile-block(".tile-type-uncle", $tile-type-uncle-color);
+  // @include generate-tile-block(".tile-type-reorg", $tile-type-reorg-color);
+  // @include generate-tile-block(
+  //   ".tile-type-emission-reward",
+  //   $tile-type-emission-reward-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-transaction",
+  //   $tile-type-transaction-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-contract-call",
+  //   $tile-type-contract-call-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-contract-creation",
+  //   $tile-type-contract-creation-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-token-transfer",
+  //   $tile-type-token-transfer-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-unique-token",
+  //   $tile-type-unique-token-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-unique-token-image",
+  //   $tile-type-unique-token-image-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-internal-transaction",
+  //   $tile-type-internal-transaction-color
+  // );
+  // @include generate-tile-block(
+  //   ".tile-type-api-documentation",
+  //   $tile-type-api-documentation-color
+  // );
+  // @include generate-tile-block(
+  //   '[class*="status--error"]',
+  //   $tile-status-error-reason
+  // );
+  // @include generate-tile-block(
+  //   ".tile-status--awaiting-internal-transactions",
+  //   $tile-status-awaiting-internal-transactions
+  // );
 
   &.n-p {
     padding: 0;
   }
 
-  & + & {
-    margin-top: 1rem;
-  }
+  // & + & {
+  //   margin-top: 1rem;
+  // }
 
   @include media-breakpoint-down(md) {
     margin-bottom: 1rem;
 
     [data-selector="place-holder"] & {
       min-height: 105px;
+    }
+  }
+  
+
+  &.tile-boba {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 10px;
+    align-items: center;
+    border-bottom: 1px solid $border-color;
+    gap:20px;
+    &.tile-type-block {
+      min-width: 100%;
+      .tile-type {
+        border-radius: 10px;
+      }
+    }
+    &.tile-type-token-transfer,
+    &.tile-type-contract-creation,
+    &.tile-type-contract-call,
+    &.tile-type-transaction {
+      min-width: 100%;
+      .tile-type {
+        border-radius: 20px;
+      }
+      .tile-body {
+        flex-grow: 1;
+      }
+    }
+
+
+    &.tile-type-block,
+    &.tile-type-token-transfer,
+    &.tile-type-contract-creation,
+    &.tile-type-contract-call,
+    &.tile-type-transaction {
+      .tile-type {
+        background-color: #f6f7f9;
+        
+        padding: 1rem;
+        margin: 0 10px 0;
+      }
+      .tile-bottom-contents {
+        max-width: 90%;
+        align-items: center;
+        div:nth-child(2) {
+          padding: 5px;
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: flex-start;
+          margin: auto 0px;
+          gap:10px;
+        }
+        .tile-block {
+          display: flex;
+          justify-content: space-around;
+          flex-direction: column;
+          gap:10px;
+          .tile-title {
+            margin-bottom: 0px;
+            padding: 0;
+          }
+        }
+      }
     }
   }
 
@@ -359,6 +433,7 @@ $tile-body-a-color: #5959d8 !default;
 // Loader
 .tile-type-loading {
   background-color: #fff;
+  border-left: none;
   padding-top: 30px;
   padding-bottom: 28px;
 }
@@ -432,7 +507,7 @@ $tile-body-a-color: #5959d8 !default;
     left: -4px;
     width: calc(100% + 5px);
     height: calc(100% + 2px);
-    background-color: #F6F7F9;
+    // background-color: #F6F7F9;
     border-radius: 4px;
     overflow: hidden;
     transition: .24s ease-out;

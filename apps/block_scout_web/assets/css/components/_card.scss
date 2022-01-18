@@ -169,7 +169,10 @@ $card-tab-icon-color-active: #fff !default;
 }
 
 .card-chain-blocks {
-  min-height: 233px;
+  // min-height: 233px;
+  flex-grow: 1;
+  min-width: unset;
+  min-height: 664px;
   max-height: auto;
   [class*="col-"]:last-child {
     .tile {
@@ -179,8 +182,10 @@ $card-tab-icon-color-active: #fff !default;
 }
 
 .card-chain-transactions {
+  flex-grow: 1;
   min-height: 664px;
   max-height: auto;
+  min-width: unset;
 
   .tile {
     margin-bottom: 0;
